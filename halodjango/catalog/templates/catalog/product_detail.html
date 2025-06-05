@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - My Catalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/style.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fas fa-store"></i> My Awesome Catalog</h1>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/product/"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="/contact/"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="product-detail">
+            <div class="product-detail-image">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                <img src="{% static 'catalog/images/default-product.jpg' %}" alt="Default product image">
+                {% endif %}
+            </div>
+            <div class="product-detail-info">
+                <h2>{{ product.name }}</h2>
+                <div class="product-meta">
+                    <span class="price">${{ product.price }}</span>
+                    <span class="stock {% if product.in_stock %}in-stock{% else %}out-of-stock{% endif %}">
+                        <i class="fas {% if product.in_stock %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
+                        {% if product.in_stock %}In Stock{% else %}Out of Stock{% endif %}
+                    </span>
+                </div>
+                <div class="product-description">
+                    <h3>Description</h3>
+                    <p>{{ product.description }}</p>
+                </div>
+                <div class="product-features">
+                    <h3>Key Features</h3>
+                    <ul>
+                        {% for feature in product.features.all %}
+                        <li><i class="fas fa-check"></i> {{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="product-actions">
+                    {% if product.in_stock %}
+                    <button class="cta-button"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                    {% endif %}
+                    <a href="/product/" class="secondary-button"><i class="fas fa-arrow-left"></i> Back to Products</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3><i class="fas fa-store"></i> My Awesome Catalog</h3>
+                <p>Your one-stop shop for amazing products</p>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 My Awesome Catalog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

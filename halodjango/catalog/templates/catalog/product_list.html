@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - My Catalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'catalog/css/style.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fas fa-store"></i> My Awesome Catalog</h1>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/product/" class="active"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="/contact/"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="products-header">
+            <h2><i class="fas fa-box"></i> Our Products</h2>
+            <p>Browse through our amazing collection of products</p>
+        </section>
+
+        <div class="product-container">
+            <aside class="product-sidebar">
+                <div class="category-filter">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li>
+                            <a href="{% url 'product_list' %}" class="{% if not current_category %}active{% endif %}">
+                                <i class="fas fa-layer-group"></i> All Categories
+                            </a>
+                        </li>
+                        {% for category_name in categories %}
+                        <li>
+                            <a href="?category={{ category_name }}" 
+                               class="{% if current_category == category_name %}active{% endif %}">
+                                {% if category_name == 'electronics' %}
+                                    <i class="fas fa-laptop"></i>
+                                {% elif category_name == 'clothing' %}
+                                    <i class="fas fa-tshirt"></i>
+                                {% elif category_name == 'books' %}
+                                    <i class="fas fa-book"></i>
+                                {% elif category_name == 'home' %}
+                                    <i class="fas fa-home"></i>
+                                {% elif category_name == 'sports' %}
+                                    <i class="fas fa-running"></i>
+                                {% endif %}
+                                {{ category_name|title }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </aside>
+
+            <section class="product-grid">
+                {% if products %}
+                    {% for product in products %}
+                    <div class="product-card">
+                        <div class="product-card-image">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                            <img src="{% static 'catalog/images/default-product.jpg' %}" alt="Default product image">
+                            {% endif %}
+                            <div class="product-card-overlay">
+                                <a href="{% url 'product_detail' product.id %}" class="view-details">
+                                    <i class="fas fa-eye"></i> View Details
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-card-content">
+                            <div class="product-category">
+                                <span>
+                                    {% if product.category == 'electronics' %}
+                                        <i class="fas fa-laptop"></i>
+                                    {% elif product.category == 'clothing' %}
+                                        <i class="fas fa-tshirt"></i>
+                                    {% elif product.category == 'books' %}
+                                        <i class="fas fa-book"></i>
+                                    {% elif product.category == 'home' %}
+                                        <i class="fas fa-home"></i>
+                                    {% elif product.category == 'sports' %}
+                                        <i class="fas fa-running"></i>
+                                    {% endif %}
+                                    {{ product.category|title }}
+                                </span>
+                            </div>
+                            <h3>{{ product.name }}</h3>
+                            <p>{{ product.description|truncatewords:20 }}</p>
+                            <div class="product-card-footer">
+                                <span class="price">${{ product.price }}</span>
+                                <span class="stock-status {% if product.in_stock %}in-stock{% else %}out-of-stock{% endif %}">
+                                    {% if product.in_stock %}
+                                        <i class="fas fa-check-circle"></i> In Stock
+                                    {% else %}
+                                        <i class="fas fa-times-circle"></i> Out of Stock
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-products">
+                        <i class="fas fa-box-open"></i>
+                        <p>No products available in this category at the moment.</p>
+                        <a href="{% url 'product_list' %}" class="cta-button">View All Products</a>
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3><i class="fas fa-store"></i> My Awesome Catalog</h3>
+                <p>Your one-stop shop for amazing products</p>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 My Awesome Catalog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
